@@ -33,3 +33,6 @@ coverage/
 
 # Benchmarks
 /criterion/
+
+# Internal documentation
+MEMORY.md
