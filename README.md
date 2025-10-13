@@ -2,6 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/turbine-llm)](https://crates.io/crates/turbine-llm)
 [![Documentation](https://docs.rs/turbine-llm/badge.svg)](https://docs.rs/turbine-llm)
+[![Context7](https://img.shields.io/badge/Context7-Docs-orange)](https://context7.com/renaiss-ai/turbine-llm)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](https://github.com/Renaiss-AI/turbine-llm#license)
 [![CI](https://github.com/Renaiss-AI/turbine-llm/workflows/CI/badge.svg)](https://github.com/Renaiss-AI/turbine-llm/actions)
 
@@ -219,6 +220,7 @@ cargo run --example conversation
 ## Documentation
 
 - [API Documentation](https://docs.rs/turbine-llm)
+- [Context7 Docs](https://context7.com/renaiss-ai/turbine-llm) - AI-powered documentation
 - [Examples](./examples/)
 - [Changelog](./CHANGELOG.md)
 - [Contributing](./CONTRIBUTING.md)
