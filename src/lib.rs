@@ -16,6 +16,26 @@
 //!
 //! ## Quick Start
 //!
+//! ### Simplified API (Recommended)
+//!
+//! ```no_run
+//! use turbine_llm::TurbineClient;
+//!
+//! #[tokio::main]
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     // Create client with model string - automatically detects provider
+//!     let client = TurbineClient::from_model("openai/gpt-4o-mini")?;
+//!
+//!     // Simple one-liner to send a message
+//!     let response = client.send("What is Rust?").await?;
+//!     println!("{}", response.content);
+//!
+//!     Ok(())
+//! }
+//! ```
+//!
+//! ### Traditional API
+//!
 //! ```no_run
 //! use turbine_llm::{TurbineClient, LLMRequest, Message, Provider};
 //!

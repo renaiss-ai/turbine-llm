@@ -63,38 +63,66 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-turbine-llm = "0.1"
+turbine-llm = "0.2"
 tokio = { version = "1", features = ["full"] }
 ```
 
 ## Quick Start
 
-### 1. Set API Keys
+### 1. Simplified API (Recommended) 🚀
 
-```bash
-export OPENAI_API_KEY="your-openai-key"
-export ANTHROPIC_API_KEY="your-anthropic-key"
-export GEMINI_API_KEY="your-gemini-key"
-export GROQ_API_KEY="your-groq-key"
+The easiest way to get started - just pass a model string:
+
+```rust
+use turbine_llm::TurbineClient;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Create client with model string - provider is automatically detected
+    let client = TurbineClient::from_model("openai/gpt-4o-mini")?;
+
+    // Simple one-liner to send a message
+    let response = client.send("What is Rust?").await?;
+    println!("{}", response.content);
+
+    Ok(())
+}
 ```
 
-### 2. Basic Usage
+**Supported model string formats:**
+- Explicit provider: `"openai/gpt-4o-mini"`, `"google/gemini-flash"`, `"anthropic/claude-3-5-sonnet"`
+- Inferred from name: `"gpt-4o"`, `"claude-3-5-sonnet"`, `"gemini-flash"`, `"llama-3.3-70b"`
+
+If the API key isn't in your environment, you'll be prompted to enter it interactively.
+
+**With system prompt:**
+
+```rust
+let response = client.send_with_system(
+    "You are a Rust expert",
+    "Explain ownership in one sentence"
+).await?;
+```
+
+### 2. Traditional API (Full Control)
+
+For advanced use cases, use the traditional builder pattern:
 
 ```rust
 use turbine_llm::{TurbineClient, LLMRequest, Message, Provider};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Create a client for your chosen provider
+    // Set API key in environment first
+    // export OPENAI_API_KEY="your-key"
+
     let client = TurbineClient::new(Provider::OpenAI)?;
 
-    // Build a request
     let request = LLMRequest::new("gpt-4o-mini")
         .with_system_prompt("You are a helpful assistant.")
         .with_message(Message::user("What is Rust?"))
         .with_max_tokens(100);
 
-    // Send and get response
     let response = client.send_request(&request).await?;
     println!("{}", response.content);
 
@@ -138,9 +166,44 @@ let request = LLMRequest::new("gemini-2.0-flash-exp")
 
 ## API Reference
 
+### TurbineClient
+
+#### Simplified Constructor (Recommended)
+
+```rust
+// Automatic provider detection from model string
+let client = TurbineClient::from_model("openai/gpt-4o-mini")?;
+
+// Simple message sending
+let response = client.send("Your message").await?;
+
+// With system prompt
+let response = client.send_with_system("System prompt", "User message").await?;
+```
+
+#### With Explicit API Key
+
+Pass the API key directly instead of using environment variables:
+
+```rust
+// With provider enum
+let client = TurbineClient::new_with_key(Provider::OpenAI, "sk-xxx");
+
+// With model string
+let client = TurbineClient::from_model_with_key("openai/gpt-4o", "sk-xxx")?;
+let response = client.send("Hello").await?;
+```
+
+#### Traditional Constructor
+
+```rust
+let client = TurbineClient::new(Provider::OpenAI)?;
+let response = client.send_request(&request).await?;
+```
+
 ### Provider
 
-Select which LLM provider to use:
+Select which LLM provider to use (for traditional API):
 
 ```rust
 pub enum Provider {
@@ -150,6 +213,8 @@ pub enum Provider {
     Groq,        // Requires GROQ_API_KEY
 }
 ```
+
+**Note:** When using `from_model()`, the provider is automatically detected from the model string.
 
 ### LLMRequest Builder
 
@@ -207,6 +272,9 @@ match client.send_request(&request).await {
 Run the included examples:
 
 ```bash
+# Simplified API (recommended for beginners)
+cargo run --example simple_usage
+
 # Basic text generation
 cargo run --example text_generation
 

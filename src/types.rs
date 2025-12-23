@@ -1,3 +1,4 @@
+use crate::error::TurbineError;
 use serde::{Deserialize, Serialize};
 
 /// LLM provider selection.
@@ -49,6 +50,65 @@ impl Provider {
             Provider::Gemini => "https://generativelanguage.googleapis.com/v1beta",
             Provider::Groq => "https://api.groq.com/openai/v1",
         }
+    }
+
+    /// Parses a provider from a model string in format "provider/model-name".
+    ///
+    /// Supported provider prefixes:
+    /// - "openai/" or "gpt" → OpenAI
+    /// - "anthropic/" or "claude" → Anthropic
+    /// - "google/" or "gemini" → Gemini
+    /// - "groq/" or "llama" or "mixtral" → Groq
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use turbine_llm::Provider;
+    ///
+    /// let (provider, model) = Provider::from_model_string("google/gemini-flash").unwrap();
+    /// assert_eq!(provider, Provider::Gemini);
+    /// assert_eq!(model, "gemini-flash");
+    ///
+    /// let (provider, model) = Provider::from_model_string("claude-3-5-sonnet").unwrap();
+    /// assert_eq!(provider, Provider::Anthropic);
+    /// assert_eq!(model, "claude-3-5-sonnet");
+    /// ```
+    pub fn from_model_string(model: &str) -> Result<(Self, String), TurbineError> {
+        // Check for explicit provider prefix (e.g., "openai/gpt-4")
+        if let Some((prefix, model_name)) = model.split_once('/') {
+            let provider = match prefix.to_lowercase().as_str() {
+                "openai" => Provider::OpenAI,
+                "anthropic" => Provider::Anthropic,
+                "google" | "gemini" => Provider::Gemini,
+                "groq" => Provider::Groq,
+                _ => {
+                    return Err(TurbineError::InvalidResponse(format!(
+                        "Unknown provider prefix: {}. Supported: openai, anthropic, google, gemini, groq",
+                        prefix
+                    )));
+                }
+            };
+            return Ok((provider, model_name.to_string()));
+        }
+
+        // Infer provider from model name patterns
+        let model_lower = model.to_lowercase();
+        let provider = if model_lower.starts_with("gpt") {
+            Provider::OpenAI
+        } else if model_lower.starts_with("claude") {
+            Provider::Anthropic
+        } else if model_lower.starts_with("gemini") {
+            Provider::Gemini
+        } else if model_lower.starts_with("llama") || model_lower.starts_with("mixtral") {
+            Provider::Groq
+        } else {
+            return Err(TurbineError::InvalidResponse(format!(
+                "Cannot infer provider from model name: {}. Use format 'provider/model' (e.g., 'openai/gpt-4')",
+                model
+            )));
+        };
+
+        Ok((provider, model.to_string()))
     }
 }
 

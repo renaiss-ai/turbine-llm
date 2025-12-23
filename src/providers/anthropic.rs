@@ -22,6 +22,13 @@ impl AnthropicProvider {
             base_url: Provider::Anthropic.base_url().to_string(),
         })
     }
+
+    pub fn new_with_key(api_key: impl Into<String>) -> Self {
+        Self {
+            api_key: api_key.into(),
+            base_url: Provider::Anthropic.base_url().to_string(),
+        }
+    }
 }
 
 #[derive(Serialize)]

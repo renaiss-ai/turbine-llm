@@ -1,6 +1,6 @@
 [package]
 name = "turbine-llm"
-version = "0.1.0"
+version = "0.2.1"
 edition = "2024"
 authors = ["Renaiss AI <research@renaiss.ai>"]
 description = "Unified Rust interface for multiple LLM providers with growing model support"

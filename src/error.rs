@@ -32,6 +32,10 @@ pub enum TurbineError {
     /// Required field is missing
     #[error("Missing required field: {0}")]
     MissingField(String),
+
+    /// IO error
+    #[error("IO error: {0}")]
+    IoError(#[from] std::io::Error),
 }
 
 /// Convenience type alias for Results that may return [`TurbineError`].
