@@ -173,7 +173,7 @@ impl TurbineClient {
     /// use turbine_llm::TurbineClient;
     ///
     /// let client = TurbineClient::from_model_with_key("openai/gpt-4o", "sk-xxx")?;
-    /// let response = client.send("Hello").await?;
+    /// // client.send("Hello").await?;
     /// # Ok::<(), turbine_llm::TurbineError>(())
     /// ```
     pub fn from_model_with_key(model_str: &str, api_key: impl Into<String>) -> Result<Self> {

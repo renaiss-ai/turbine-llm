@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2025-01-23
+
+### Fixed
+- Fixed doctest compilation error in `from_model_with_key` example
+
 ## [0.2.1] - 2025-01-23
 
 ### Added
@@ -54,7 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Example code for basic usage, JSON output, and conversations
 - MIT OR Apache-2.0 dual licensing
 
-[Unreleased]: https://github.com/Renaiss-AI/turbine-llm/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/Renaiss-AI/turbine-llm/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/Renaiss-AI/turbine-llm/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/Renaiss-AI/turbine-llm/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Renaiss-AI/turbine-llm/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Renaiss-AI/turbine-llm/releases/tag/v0.1.0
